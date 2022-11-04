@@ -1,9 +1,11 @@
 import * as trpcExpress from '@trpc/server/adapters/express';
 import express from 'express';
 import cors from 'cors'
+import { graphqlHTTP } from 'express-graphql'
+
 import { trpcRouter } from './trpc'
 import { schema, root } from './graphql'
-import { graphqlHTTP } from 'express-graphql'
+import restRouter from './rest'
 
 async function main() {
     const app = express();
@@ -26,6 +28,8 @@ async function main() {
         rootValue: root,
         graphiql: true,
     }));
+
+    app.use('/rest', restRouter)
 
     app.get('/', (_req, res) => res.send('hello'));
     app.listen(2021, () => {

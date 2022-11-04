@@ -5,7 +5,7 @@ import {
   ApolloProvider,
 } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const defaultOptions: DefaultOptions = {
   watchQuery: {
@@ -46,6 +46,7 @@ const ADD_USER = gql`
 `;
 
 function GRAPHQL() {
+  const [users, setUsers] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       const hello = await client.query({
@@ -58,18 +59,18 @@ function GRAPHQL() {
       });
       const users = await client.query({ query: GET_USERS });
       console.log({ hello, users });
+
+      setUsers(users.data.getUsers);
     };
     fetchData();
   }, []);
 
-  /*   const users = useQuery(GET_USERS);
-  console.log(users.data);
- */
-  /*   const createMutation = useQuery(ADD_USER, {
-    variables: { name: "Username", surname: "Surname" },
-  }); */
-
-  return <div>GRAPHQL</div>;
+  return (
+    <div>
+      <div>GRAPHQL</div>
+      <div>{JSON.stringify(users)}</div>
+    </div>
+  );
 }
 
 const GraphqlWithApollo = () => (
