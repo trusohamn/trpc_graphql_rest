@@ -1,7 +1,9 @@
 import * as trpcExpress from '@trpc/server/adapters/express';
 import express from 'express';
-import { trpcRouter } from './trpc'
 import cors from 'cors'
+import { trpcRouter } from './trpc'
+import { schema, root } from './graphql'
+import { graphqlHTTP } from 'express-graphql'
 
 async function main() {
     const app = express();
@@ -18,6 +20,13 @@ async function main() {
             router: trpcRouter,
         }),
     );
+
+    app.use('/graphql', graphqlHTTP({
+        schema: schema,
+        rootValue: root,
+        graphiql: true,
+    }));
+
     app.get('/', (_req, res) => res.send('hello'));
     app.listen(2021, () => {
         console.log('listening on port 2021');

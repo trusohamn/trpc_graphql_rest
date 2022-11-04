@@ -6,43 +6,47 @@ function createRouter() {
     return trpc.router();
 }
 
+// DB 
 let id = 0;
 
 const db = {
-    posts: [
+    users: [
         {
             id: ++id,
-            title: 'hello',
+            name: 'Marta',
+            surname: 'Trusohamn'
         },
     ],
 };
+// //////
 
-const posts = createRouter()
+const users = createRouter()
     .mutation('create', {
         input: z.object({
-            title: z.string(),
+            name: z.string(),
+            surname: z.string()
         }),
         resolve: ({ input }) => {
-            const post = {
+            const user = {
                 id: ++id,
                 ...input,
             };
-            db.posts.push(post);
-            return post;
+            db.users.push(user);
+            return user;
         },
     })
     .query('list', {
-        resolve: () => db.posts,
+        resolve: () => db.users,
     });
 
-// root router to call
+
 export const trpcRouter = createRouter()
     .query('hello', {
         input: z.string().nullish(),
-        resolve: ({ input, ctx }) => {
+        resolve: ({ input }) => {
             return `hello ${input ?? 'world'}`;
         },
     })
-    .merge('post.', posts)
+    .merge('users.', users)
 
 export type TrpcRouter = typeof trpcRouter;

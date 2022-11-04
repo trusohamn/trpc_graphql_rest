@@ -14,14 +14,16 @@ export function TRPC() {
   useEffect(() => {
     const fetchData = async () => {
       const hello = await trpcClient.query("hello");
-      const post = await trpcClient.query("post.list");
-      console.log({ hello, post });
-      const mutation = await trpcClient.mutation("post.create", {
-        title: "new2!",
+      const users = await trpcClient.query("users.list");
+      console.log({ hello, users });
+
+      const mutation = await trpcClient.mutation("users.create", {
+        name: "Maria",
+        surname: "Nova",
       });
 
-      const post2 = await trpcClient.query("post.list");
-      console.log({ mutation, post2 });
+      const usersMutated = await trpcClient.query("users.list");
+      console.log({ mutation, usersMutated });
     };
     fetchData();
   }, [trpcClient]);

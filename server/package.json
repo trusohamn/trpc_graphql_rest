@@ -9,12 +9,14 @@
     "start": "yarn dev"
   },
   "dependencies": {
-    "@trpc/client": "^9.27.4",
     "@trpc/react": "^9.27.4",
     "@trpc/server": "^9.27.4",
     "abort-controller": "^3.0.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-graphql": "^0.12.0",
+    "graphql": "^16.6.0",
+    "graphql-server": "^0.3.2",
     "node-fetch": "^2.6.1",
     "zod": "^3.0.0"
   },
