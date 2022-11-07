@@ -1,17 +1,13 @@
 import { useEffect, useState } from "react";
 import { createReactQueryHooks } from "@trpc/react";
 import type { TrpcRouter } from "../../server/src/trpc";
+import { User } from "./types";
+import Display from "./Display";
 
 export const trpc = createReactQueryHooks<TrpcRouter>();
 
 export function TRPC() {
-  const [users, setUsers] = useState<
-    {
-      id: number;
-      name: string;
-      surname: string;
-    }[]
-  >([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   const [trpcClient] = useState(() =>
     trpc.createClient({
@@ -21,16 +17,17 @@ export function TRPC() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const hello = await trpcClient.query("hello");
+      const hello = trpcClient.query("hello");
 
-      await trpcClient.mutation("users.create", {
+      trpcClient.mutation("users.create", {
         name: "Maria",
         surname: "Nova",
       });
 
-      const users = await trpcClient.query("users.list");
+      const users = trpcClient.query("users.list");
       console.log({ hello, users });
-      setUsers(users);
+
+      const cats = await trpcClient.query("cats.list");
     };
     fetchData();
   }, [trpcClient]);
@@ -38,7 +35,7 @@ export function TRPC() {
   return (
     <div>
       <div>TRPC</div>
-      <div>{JSON.stringify(users)}</div>
+      <Display users={users} />
     </div>
   );
 }
